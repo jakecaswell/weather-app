@@ -8,6 +8,8 @@ var humidity = document.getElementById("humidity");
 var uvIndex = document.getElementById("UV-index");
 var weatherStatusIcon = document.getElementById("weather-icon");
 var forecastEl = document.getElementById("five-day-forecast");
+var searchHistoryEl = document.getElementById("saved-cities");
+
 
 console.log(date);
 
@@ -48,9 +50,14 @@ function displayTodaysWeather(data) {
         weatherStatusIcon.src = "https://icons-for-free.com/iconfiles/png/512/thunder+weather+icon-1320196485851739460.png";
         uvIndex.textContent = data.weather[0].main;
     }
+
+    // save to localStorage
+    var city = citySearched.value.trim();
+    localStorage.setItem("city", city);
 }
 
 function displayForecast(data) {
+    forecastEl.textContent = "";
     for (var i = 0; i < data.list.length; i += 8) {
         // create a new div for forecast cards
         var dailyForecast = document.createElement("div");
@@ -74,13 +81,37 @@ function displayForecast(data) {
         // append the forecast card to the html page
         forecastEl.appendChild(dailyForecast);
     }
+    loadHistory();
+}
+
+$(document).ready(loadHistory());
+
+
+function loadHistory() {
+    var data = localStorage.getItem("city");
+    if (data) {
+        var historyButtonEl = document.createElement("button");
+        historyButtonEl.classList = "storageButton";
+        historyButtonEl.setAttribute("id", "storage-button");
+        historyButtonEl.type = "button";
+        historyButtonEl.textContent = data;
+        searchHistoryEl.appendChild(historyButtonEl);
+    }
+
 }
 
 
 searchButtonEl.addEventListener("click", function() {
+    citySearched.textContent = "";
     var city = citySearched.value.trim();
     getCurrentWeather(city);
     getWeekWeather(city);
+    
 })
 
-
+document.getElementById("storage-button").addEventListener("click", function() {
+    var city = localStorage.getItem("city");
+    console.log(city);
+    getCurrentWeather(city);
+    getWeekWeather(city);
+})
