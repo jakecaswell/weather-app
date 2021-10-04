@@ -1,0 +1,30 @@
+:root {
+    --blueColor: rgb(14, 0, 158);
+}
+
+header {
+    background-color: var(--blueColor);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+}
+#city-search {
+    width: 100%;
+    margin-bottom: .5rem;
+}
+#searchBtn {
+    width: 100%;
+}
+.col-md-2 #weather-icon {
+    height: 70px;
+    width: 70px;
+}
+#weatherBox {
+    margin-right: 2rem;
+}
+.dailyForecastCard {
+    background: var(--blueColor);
+    color: white;
+    padding: 10px;
+}
