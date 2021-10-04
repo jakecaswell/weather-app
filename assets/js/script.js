@@ -9,9 +9,15 @@ var uvIndex = document.getElementById("UV-index");
 var weatherStatusIcon = document.getElementById("weather-icon");
 var forecastEl = document.getElementById("five-day-forecast");
 var searchHistoryEl = document.getElementById("saved-cities");
+var storedCities = { ...localStorage }
+var storageCount = getStorageCount();
+console.log(storedCities) 
+console.log(storageCount)
 
+function getStorageCount(storedCities) { 
 
-console.log(date);
+    return Object.keys(storedCities).length;
+}
 
 function getCurrentWeather(city) {
     fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=765a731e723a37657dfae4027003f17b&units=imperial")
@@ -53,7 +59,7 @@ function displayTodaysWeather(data) {
 
     // save to localStorage
     var city = citySearched.value.trim();
-    localStorage.setItem("city", city);
+    localStorage.setItem( "city", city);
 }
 
 function displayForecast(data) {
@@ -88,8 +94,8 @@ $(document).ready(loadHistory());
 
 
 function loadHistory() {
-    var data = localStorage.getItem("city");
     if (data) {
+        var data = localStorage.getItem("city")
         var historyButtonEl = document.createElement("button");
         historyButtonEl.classList = "storageButton";
         historyButtonEl.setAttribute("id", "storage-button");
