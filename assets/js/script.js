@@ -9,9 +9,14 @@ var uvIndex = document.getElementById("UV-index");
 var weatherStatusIcon = document.getElementById("weather-icon");
 var forecastEl = document.getElementById("five-day-forecast");
 var searchHistoryEl = document.getElementById("saved-cities");
-// var storedCities = { ...localStorage }
+var storedCities = [];
+
+if (localStorage.hasOwnProperty("cities")) {
+    storedCities = JSON.parse(localStorage.getItem('cities'));
+}
+
 // var storageCount = getStorageCount();
-// console.log(storedCities) 
+ // console.log(storedCities) 
 // console.log(storageCount)
 
 // function getStorageCount(storedCities) { 
@@ -59,7 +64,14 @@ function displayTodaysWeather(data) {
 
     // save to localStorage
     var city = citySearched.value.trim();
-    localStorage.setItem( "city", city);
+    let storage = [];
+    if (storedCities.length) {
+        storage = [...storedCities]
+    }
+    storage.push(city);
+    localStorage.setItem( "cities", JSON.stringify(storage));
+    storedCities = JSON.parse(localStorage.getItem('cities'));
+    console.log(storage);
 }
 
 function displayForecast(data) {
@@ -94,15 +106,35 @@ $(document).ready(loadHistory());
 
 
 function loadHistory() {
-    var data = localStorage.getItem("city")
-    if (data) {  
-        var historyButtonEl = document.createElement("button");
-        historyButtonEl.classList = "storageButton";
-        historyButtonEl.setAttribute("id", "storage-button");
-        historyButtonEl.type = "button";
-        historyButtonEl.textContent = data;
-        searchHistoryEl.appendChild(historyButtonEl);
-    }
+    var cities = storedCities;
+    
+
+    if (cities){
+        for(i = 0; i < storedCities.length; i++) {
+            var historyButtonEl = document.createElement("button");
+            historyButtonEl.classList = "storageButton";
+            historyButtonEl.setAttribute("id", "storage-button");
+            historyButtonEl.type = "button";
+            historyButtonEl.textContent = cities[i];
+            searchHistoryEl.appendChild(historyButtonEl);
+        }
+        // storedCities.map(item => {
+        //     var historyButtonEl = document.createElement("button");
+        //     historyButtonEl.classList = "storageButton";
+        //     historyButtonEl.setAttribute("id", "storage-button");
+        //     historyButtonEl.type = "button";
+        //     historyButtonEl.textContent = cities;
+        //     searchHistoryEl.appendChild(historyButtonEl);
+        // })
+
+}
+        //  var historyButtonEl = document.createElement("button");
+        // historyButtonEl.classList = "storageButton";
+        // historyButtonEl.setAttribute("id", "storage-button");
+        // historyButtonEl.type = "button";
+        // historyButtonEl.textContent = data;
+        // searchHistoryEl.appendChild(historyButtonEl);
+
 
 }
 
@@ -116,7 +148,7 @@ searchButtonEl.addEventListener("click", function() {
 })
 
 document.getElementById("storage-button").addEventListener("click", function() {
-    var city = localStorage.getItem("city");
+    var city = storedCities;
     console.log(city);
     getCurrentWeather(city);
     getWeekWeather(city);
